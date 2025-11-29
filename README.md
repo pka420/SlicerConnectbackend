@@ -65,21 +65,16 @@ cd backend
 ### 2️⃣ Create a Virtual Environment
 
 ```bash
-python -m venv venv
+python3.11 -m venv venv
 source venv/bin/activate     # on macOS/Linux
 venv\Scripts\activate        # on Windows
+pip install --upgrade pip
 ```
 
 ### 3️⃣ Install Dependencies
 
 ```bash
 pip install -r requirements.txt
-```
-
-**If you don’t have a requirements.txt yet, create it with:**
-
-```bash
-pip freeze > requirements.txt
 ```
 
 ### 4️⃣ Run the Server
