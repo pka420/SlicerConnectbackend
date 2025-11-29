@@ -13,7 +13,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 SECRET_KEY = "mysecretkey"
 ALGORITHM = "HS256"
 
-# ✅ Password helpers
 def hash_password(password: str):
     prehashed = hashlib.sha256(password.encode("utf-8")).hexdigest()
     return pwd_context.hash(prehashed)
@@ -25,7 +24,6 @@ def verify_password(plain_password: str, hashed_password: str):
 def create_access_token(data: dict):
     return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
-# ✅ Pydantic models for JSON input
 class RegisterRequest(BaseModel):
     username: str
     email: EmailStr
@@ -35,7 +33,6 @@ class LoginRequest(BaseModel):
     email: EmailStr
     password: str
 
-# ✅ Register endpoint
 @router.post("/register")
 def register(request: RegisterRequest, db: Session = Depends(get_db)):
     if db.query(User).filter(User.username == request.username).first():
@@ -50,7 +47,6 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return {"message": f"User '{request.username}' registered successfully!"}
 
-# ✅ Login endpoint
 @router.post("/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
