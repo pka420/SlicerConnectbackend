@@ -12,6 +12,26 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - slicer_net
+      
+  mailserver:
+    image: docker.io/mailserver/docker-mailserver:latest
+    container_name: mailserver
+    hostname: mail
+    domainname: slicer.local
+    env_file: .env
+    ports:
+      - "25:25"
+      - "587:587"
+      - "993:993"
+    volumes:
+      - ./maildata:/var/mail
+      - ./mailstate:/var/mail-state
+      - ./maillogs:/var/log/mail
+      - ./config-mail:/tmp/docker-mailserver
+    cap_add:
+      - NET_ADMIN
+      - SYS_PTRACE
+    restart: always
 
   backend:
     build:
@@ -24,6 +44,7 @@ services:
       - "${BACKEND_PORT}:8000"
     depends_on:
       - db
+      - mailserver
     networks:
       - slicer_net
 

@@ -35,9 +35,17 @@ loginForm.addEventListener("submit", async (e) => {
     });
 
     const data = await res.json();
-    if (res.ok) {
-      alert(`✅ Welcome back, ${data.user || "User"}!`);
-      message.textContent = "";
+      if (res.ok) {
+      if (data.is_verified === false) {
+        message.innerHTML = `
+          ⚠️ Your email is not verified.<br>
+          <button id="resend-btn">Resend verification link</button>
+        `;
+        document.getElementById("resend-btn").onclick = resendVerification;
+      } else {
+        alert(`✅ Welcome back, ${data.user || "User"}!`);
+        message.textContent = "";
+      }
     } else {
       if (data.detail?.includes("Invalid")) {
         alert("❌ Invalid email or password!");
@@ -66,7 +74,8 @@ registerForm.addEventListener("submit", async (e) => {
     const data = await res.json().catch(() => ({}));
 
     if (res.ok) {
-      alert("🎉 Registration successful!");
+      alert("📩 Registered! Please verify your email before logging in.");
+
       registerForm.reset();
       loginTab.click();
     } else if (Array.isArray(data.detail)) {
@@ -87,4 +96,31 @@ registerForm.addEventListener("submit", async (e) => {
     alert("⚠️ Could not connect to backend. Make sure FastAPI is running!");
   }
 });
+
+async function resendVerification() {
+  const email = document.getElementById("login-email").value;
+
+  if (!email) {
+    alert("Enter email first");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/auth/resend-verification", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("✅ Verification email resent!");
+    } else {
+      alert(data.detail || "Failed to resend email");
+    }
+  } catch {
+    alert("Server error");
+  }
+}
 

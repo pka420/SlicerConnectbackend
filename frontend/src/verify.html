@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Verification</title>
+</head>
+<body>
+  <h2 id="status">Verifying email...</h2>
+
+  <script>
+    const params = new URLSearchParams(window.location.search)
+    const token = params.get("token")
+
+    fetch(`http://127.0.0.1:8000/auth/verify-email?token=${token}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById("status").textContent = "✅ Email verified successfully!"
+        } else {
+          document.getElementById("status").textContent = "❌ Verification failed"
+        }
+      })
+      .catch(() => {
+        document.getElementById("status").textContent = "⚠️ Server error"
+      })
+  </script>
+</body>
+</html>
+
