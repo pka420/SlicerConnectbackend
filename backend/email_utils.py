@@ -2,10 +2,10 @@ import smtplib
 from email.mime.text import MIMEText
 import os
 
-SMTP_SERVER = os.getenv("SMTP_SERVER")
-SMTP_PORT = int(os.getenv("SMTP_PORT"))
-EMAIL_USER = os.getenv("EMAIL_USER")
-EMAIL_PASS = os.getenv("EMAIL_PASS")
+SMTP_SERVER = os.getenv("MAIL_SERVER")
+SMTP_PORT = int(os.getenv("MAIL_PORT"))
+EMAIL_USER = os.getenv("MAIL_USER")
+EMAIL_PASS = os.getenv("MAIL_PASS")
 FRONTEND_URL = os.getenv("FRONTEND_URL")
 
 def send_verification_email(email, token):
@@ -19,4 +19,3 @@ def send_verification_email(email, token):
     with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as server:
         server.login(EMAIL_USER, EMAIL_PASS)
         server.send_message(msg)
-
