@@ -29,8 +29,8 @@ services:
       - NET_ADMIN
       - SYS_PTRACE
     restart: always
-    networks:          # ← ADD THIS
-      - slicer_net     # ← ADD THIS
+    networks:          
+      - slicer_net    
       
   backend:
     build:
