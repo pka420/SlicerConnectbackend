@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
 from api.auth import router as auth_router
 from api.projects import router as projects_router
+from api.collaboration import router as collab_router
+from api.segmentations import router as segmentations_router
 
 app = FastAPI(title="User Authentication API")
 
@@ -18,6 +20,8 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(auth_router, tags=["Authentication"])
 app.include_router(projects_router, tags=["Projects"])
+app.include_router(collab_router, tags=["Collaboration"])
+app.include_router(segmentations_router, tags=["Segmentations"])
 
 @app.get("/")
 def root():
